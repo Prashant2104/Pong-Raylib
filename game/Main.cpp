@@ -11,7 +11,6 @@ Color DarkGreen = GetColor(0x1e6d45ff);
 Color LightGreen = GetColor(0x3ddf8dff);
 Color Yellow = GetColor(0xffe54dff);
 
-
 class Ball {
 public:
 	float x, y;
@@ -83,7 +82,7 @@ public:
 		if (y + heigth / 2 > ballY) {
 			y -= speed * GetFrameTime();
 		}
-		if (y - heigth / 2 < ballY) {
+		if (y + heigth / 2 < ballY) {
 			y += speed * GetFrameTime();
 		}
 		EdgeDetection();
@@ -125,7 +124,7 @@ int main()
 	Sounds sfx;
 
 	const int screen_width = 1300;
-	const int screen_height = 700;
+	const int screen_height = 800;
 
 	ball.radius = 20;
 	ball.x = screen_width / 2;
@@ -135,7 +134,7 @@ int main()
 
 	player.width = cpu.width = 25;
 	player.heigth = cpu.heigth = 125;
-	player.speed = cpu.speed = 450;
+	player.speed = cpu.speed = 400;
 
 	player.x = screen_width - player.width - 10;
 	player.y = screen_height / 2 - player.heigth / 2;
@@ -160,7 +159,9 @@ int main()
 		//Update
 		ball.Update();
 		player.Update();
-		cpu.Update(ball.y);
+		if (ball.x + ball.radius < screen_width / 2) {
+			cpu.Update(ball.y);
+		}
 
 		//Collision Detection
 		if (CheckCollisionCircleRec(Vector2{ ball.x, ball.y }, ball.radius, Rectangle{ player.x, player.y, player.width, player.heigth })) {
