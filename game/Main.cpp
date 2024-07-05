@@ -129,8 +129,8 @@ int main()
 	ball.radius = 20;
 	ball.x = screen_width / 2;
 	ball.y = screen_height / 2;
-	ball.speedX = 500;
-	ball.speedY = 500;
+	ball.speedX = -500;
+	ball.speedY = -500;
 
 	player.width = cpu.width = 25;
 	player.heigth = cpu.heigth = 125;
@@ -178,6 +178,9 @@ int main()
 		DrawRectangle(screen_width / 2, 0, screen_width / 2, screen_height, Green);
 		DrawCircle(screen_width / 2, screen_height / 2, screen_height / 4, LightGreen);
 		DrawLine(screen_width / 2, 0, screen_width / 2, screen_height, WHITE);
+		DrawRectangle(0, 0, screen_width, 10, RAYWHITE);
+		DrawRectangle(0, screen_height-10, screen_width, 10, RAYWHITE);
+
 
 		//Drawing moveables
 		ball.Draw();
