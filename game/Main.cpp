@@ -11,11 +11,16 @@ Color DarkGreen = GetColor(0x1e6d45ff);
 Color LightGreen = GetColor(0x3ddf8dff);
 Color Yellow = GetColor(0xffe54dff);
 
+enum Players {
+	p, c, none
+};
+
 class Ball {
 public:
 	float x, y;
 	int speedX, speedY;
 	int radius;
+	Players lastCollidedWith = none;
 
 	void Draw() {
 		DrawCircle(x, y, radius, Yellow);
@@ -28,7 +33,7 @@ public:
 			speedY *= -1;
 		}
 		if (x + radius >= GetScreenWidth()) {
-			cpuScore++;			
+			cpuScore++;
 			Reset();
 		}
 		if (x - radius <= 0) {
@@ -37,6 +42,8 @@ public:
 		}
 	}
 	void Reset() {
+		lastCollidedWith = none;
+
 		x = GetScreenWidth() / 2;
 		y = GetScreenHeight() / 2;
 
@@ -164,12 +171,14 @@ int main()
 		}
 
 		//Collision Detection
-		if (CheckCollisionCircleRec(Vector2{ ball.x, ball.y }, ball.radius, Rectangle{ player.x, player.y, player.width, player.heigth })) {
+		if (ball.lastCollidedWith != p && CheckCollisionCircleRec(Vector2{ ball.x, ball.y }, ball.radius, Rectangle{ player.x, player.y, player.width, player.heigth })) {
+			ball.lastCollidedWith = p;
 			ball.speedX *= -1;
 			sfx.PaddleHit();
 		}
-		if (CheckCollisionCircleRec(Vector2{ ball.x, ball.y }, ball.radius, Rectangle{ cpu.x, cpu.y, cpu.width, cpu.heigth })) {
-			ball.speedX *= -1;			
+		if (ball.lastCollidedWith != c && CheckCollisionCircleRec(Vector2{ ball.x, ball.y }, ball.radius, Rectangle{ cpu.x, cpu.y, cpu.width, cpu.heigth })) {
+			ball.lastCollidedWith = c;
+			ball.speedX *= -1;
 			sfx.PaddleHit();
 		}
 
@@ -179,7 +188,7 @@ int main()
 		DrawCircle(screen_width / 2, screen_height / 2, screen_height / 4, LightGreen);
 		DrawLine(screen_width / 2, 0, screen_width / 2, screen_height, WHITE);
 		DrawRectangle(0, 0, screen_width, 10, RAYWHITE);
-		DrawRectangle(0, screen_height-10, screen_width, 10, RAYWHITE);
+		DrawRectangle(0, screen_height - 10, screen_width, 10, RAYWHITE);
 
 
 		//Drawing moveables
